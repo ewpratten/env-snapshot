@@ -6,7 +6,9 @@
 [![Audit](https://github.com/Ewpratten/env-snapshot/actions/workflows/audit.yml/badge.svg)](https://github.com/Ewpratten/env-snapshot/actions/workflows/audit.yml)
 
 
-repo description
+`env-snapshot` allows you to dump an arbitrary environment to a small-size binary file format, then at any time, on any machine, reload that environment and spawn a process with it.
+
+This is a debugging tool.
 
 ## Installation
 
