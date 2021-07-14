@@ -1,6 +1,6 @@
 [package]
 name = "env-snapshot"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Evan Pratten <ewpratten@gmail.com>"]
 edition = "2018"
 description = "Save and reload an entire environment on demand"
@@ -16,6 +16,8 @@ categories = []
 
 [dependencies]
 clap = "2.33"
-serde = { version = "1.0", features = ["derive"] }
+serde = { version = "1.0.126", features = ["derive"] }
+serde_json = "1.0.64"
 flexbuffers = "2.0"
 subprocess = "0.2"
+autojson = "0.1"

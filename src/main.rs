@@ -1,8 +1,4 @@
-use std::{
-    collections::HashMap,
-    fs::File,
-    io::Read,
-};
+use std::{collections::HashMap, fs::File, io::Read};
 
 use clap::{crate_authors, crate_description, crate_name, App, Arg, SubCommand};
 use serde::{Deserialize, Serialize};
@@ -38,6 +34,14 @@ fn main() {
                         .help("Process to spawn")
                         .required(true)
                         .takes_value(true),
+                )
+                .arg(
+                    Arg::with_name("json")
+                        .long("use-json")
+                        .short("j")
+                        .help("Use JSON instead of Flexbuffer format for parsing file")
+                        .takes_value(false)
+                        .required(false),
                 ),
         )
         .get_matches();
@@ -57,11 +61,16 @@ fn main() {
         println!("Environment saved");
     } else if let Some(matches) = matches.subcommand_matches("load") {
         // Read the environment from a file
-        let mut file = File::open(matches.value_of("file").unwrap()).unwrap();
-        let mut buffer = Vec::<u8>::new();
-        file.read_to_end(&mut buffer).unwrap();
-        let r = flexbuffers::Reader::get_root(buffer.as_slice()).unwrap();
-        let environment: HashMap<String, String> = HashMap::deserialize(r).unwrap();
+        let environment: HashMap<String, String>;
+        if matches.is_present("json") {
+            environment = autojson::structify(matches.value_of("file").unwrap()).unwrap();
+        } else {
+            let mut file = File::open(matches.value_of("file").unwrap()).unwrap();
+            let mut buffer = Vec::<u8>::new();
+            file.read_to_end(&mut buffer).unwrap();
+            let r = flexbuffers::Reader::get_root(buffer.as_slice()).unwrap();
+            environment = HashMap::deserialize(r).unwrap();
+        }
 
         // Set the environment
         println!("Setting environment...");
